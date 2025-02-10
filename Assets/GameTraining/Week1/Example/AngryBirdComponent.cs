@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using TMPro;
 using UnityEngine;
 
 public class AngryBirdComponent : MonoBehaviour
@@ -13,11 +15,35 @@ public class AngryBirdComponent : MonoBehaviour
     [SerializeField] private KeyCode RemoveAudioSource = KeyCode.Alpha3;
     [Tooltip("Bật/tắt Component AngryBirdMovement")]
     [SerializeField] private KeyCode MovementSwitch = KeyCode.Alpha4;
+    
+    [SerializeField] private TextMeshProUGUI GravityText;
+    [SerializeField] private TextMeshProUGUI MoveText;
 
+    void Start()
+    {
+        // Khởi tạo status
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            GravityText.text = "Gravity: " + rb.gravityScale;
+        }
+
+        AngryBirdMovement movement = GetComponent<AngryBirdMovement>();
+        if (movement != null)
+        {
+            if (movement.enabled)
+            {
+                MoveText.text = "Move: On";
+            }
+            else
+            {
+                MoveText.text = "Move: Off";
+            }
+        }
+    }
     // Update is called once per frame
     void Update()
     {
-
         // Nhấn phím 1 để lấy Component Rigidbody2D từ GameObject và thay đổi trọng lực tác dụng lên Angry Bird
         if (Input.GetKeyDown(GravitySwitch))
         {
@@ -26,6 +52,7 @@ public class AngryBirdComponent : MonoBehaviour
             {
                 rb.gravityScale = -rb.gravityScale; // Thay đổi tác dụng của trọng lực từ 1 thành -1 và ngược lại
                 Debug.Log("Đã thay đổi trọng lực Rigidbody thành " + rb.gravityScale);
+                GravityText.text = "Gravity: " + rb.gravityScale;
             }
         }
 
@@ -65,12 +92,15 @@ public class AngryBirdComponent : MonoBehaviour
                 if (movement.enabled)
                 {
                     Debug.Log("Đã kích hoạt khả năng di chuyển của Angry Bird");
+                    MoveText.text = "Move: On";
                 }
                 else
                 {
                     Debug.Log("Đã vô hiệu khả năng di chuyển của Angry Bird");
+                    MoveText.text = "Move: Off";
                 }
             }
         }
     }
+    
 }
